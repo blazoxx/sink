@@ -1,5 +1,5 @@
 import {v2 as cloudinary} from 'cloudinary'
-import {fs} from 'fs'
+import fs from 'node:fs'
 
 cloudinary.config({ 
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
@@ -12,11 +12,12 @@ const uploadToCloudinary = async (localFilePath) =>{
     try {
         if(!localFilePath) return null
         // Upload file to cloudinary
-        await cloudinary.uploader.upload(localFilePath, {
+        const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto",
         })
-        // file uploaded successfully
-        console.log('File uploaded successfully', response.url)
+        // file has been uploaded successfully
+        // console.log('File uploaded successfully', response.url)
+        fs.unlinkSync(localFilePath);    // remove the locally saved temporary file
         return response
 
     } catch (error) {
@@ -24,18 +25,5 @@ const uploadToCloudinary = async (localFilePath) =>{
         return null
     } 
 }
-
-
-const uploadResult = await cloudinary.uploader
-       .upload(
-           'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
-               public_id: 'shoes',
-           }
-       )
-       .catch((error) => {
-           console.log(error);
-       });
-    
-    console.log(uploadResult);
 
 export {uploadToCloudinary}
