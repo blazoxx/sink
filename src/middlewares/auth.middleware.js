@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
 import jwt from "jsonwebtoken";
-import { User } from "../models/User.model.js";
+import { User } from "../models/user.models.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {  //if res is not used, replace it with _ to avoid linting errors
   try {
