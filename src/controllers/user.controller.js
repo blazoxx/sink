@@ -261,7 +261,37 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "Current user fetched successfully"));
 });
 
+const updateAccountDetails = asyncHandler(async (req, res) => {
+  // email
+  // fullName
 
+  // for changing images change them on spot no need to update user object again and again
+  // avatar
+  // coverImage
+
+  const { email, fullName } = req.body;
+
+  if(!email || !fullName){
+    throw new ApiError(400, "Email and full name are required");
+  }
+
+  const user = await User.findById(
+    req.user._id,
+    {
+      $set: {
+        email,
+        fullName: fullName
+      }.select("-password -refreshToken")
+    },
+    { new: true }
+  );
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedUser, "Account details updated successfully")
+    );
+});
 
 export {
   registerUser,
@@ -270,4 +300,5 @@ export {
   refreshAccessToken,
   changeCureentPassword,
   getCurrentUser,
+  updateAccountDetails,
 };
